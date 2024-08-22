@@ -37,7 +37,7 @@ const createGoal = async (req, res) => {
       const user = await User.findOne({ email: assignedToEmail });
       console.log(`!!!user ${user}...`)
       if (!user) {
-        return res.status(400).json({ message: 'Assigned user not found.' });
+        throw new NotFoundError(`User with email does not exist ${assignedToEmail}`)
       }
       console.log(`user ${user._id}...`)
       assignedTo = user._id; 
