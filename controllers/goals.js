@@ -1,10 +1,11 @@
 const Goal = require('../models/Goal')
+const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
 
 const { BadRequestError, NotFoundError } = require('../errors')
 
 const getAllGoals = async (req, res) => {
-    const goals = await Goal.find({ createdBy: req.user.userId }).sort('createdAt')
+    const goals = await Goal.find({ $or: [{ createdBy: req.user._id }, { assignedTo: req.user._id }] });
     res.status(StatusCodes.OK).json({ goals, count: goals.length })
 }
 
@@ -27,9 +28,23 @@ const getGoal = async (req, res) => {
 
 const createGoal = async (req, res) => {
     req.body.createdBy = req.user.userId
+    const {assignedToEmail} = req.body;
     console.log(`Body: ${JSON.stringify(req.body)}...`)
-    // const goal = await Goal.create(req.body)
-    // res.status(StatusCodes.CREATED).json({ goal })
+
+    let assignedTo = null;
+    if (assignedToEmail) {
+      // Find the user by email
+      const user = await User.findOne({ email: assignedToEmail });
+      console.log(`!!!user ${user}...`)
+      if (!user) {
+        return res.status(400).json({ message: 'Assigned user not found.' });
+      }
+      console.log(`user ${user._id}...`)
+      assignedTo = user._id; 
+    }
+
+    req.body.assignedTo = assignedTo;
+
     try {
         const goal = await Goal.create(req.body);
         res.status(StatusCodes.CREATED).json({ goal });
@@ -37,8 +52,8 @@ const createGoal = async (req, res) => {
         console.error(error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
     }
-    // res.send('create goal')
 }
+
 
 const updateGoal = async (req, res) => {
     const {
@@ -67,7 +82,7 @@ const deleteGoal = async (req, res) => {
         params: { id: goalId },
       } = req
     
-      const goal = await Goal.findByIdAndRemove({
+      const goal = await Goal.findByIdAndDelete({
         _id: goalId,
         createdBy: userId,
       })
@@ -83,5 +98,5 @@ module.exports = {
     getGoal,
     createGoal,
     updateGoal,
-    deleteGoal
+    deleteGoal,
 }

@@ -45,4 +45,4 @@ const UserSchema = new mongoose.Schema({
     return isMatch
   }
 
-  module.exports = mongoose.model('User', UserSchema)
+  module.exports = mongoose.model('User', UserSchema, 'users')

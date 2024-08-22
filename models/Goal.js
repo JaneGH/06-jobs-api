@@ -32,6 +32,13 @@ const GoalSchema = new mongoose.Schema(
         default: 'Not Started',
       },
 
+      assignedTo:{
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        required: false,
+      },
+
+
    createdBy: {
       type: mongoose.Types.ObjectId,
       ref: 'User',
@@ -41,4 +48,4 @@ const GoalSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-module.exports = mongoose.model('Goal', GoalSchema)
+module.exports = mongoose.model('Goal', GoalSchema, 'goals')

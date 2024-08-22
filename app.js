@@ -29,7 +29,7 @@ app.use(xss());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('Jobs API');
+  res.send('Goals API');
 });
 
 // routers
