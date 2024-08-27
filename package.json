@@ -21,13 +21,16 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.3",
+    "node-mailjet": "^6.0.4",
+    "nodemailer": "^6.9.14",
     "rate-limiter": "^0.2.0",
+    "simple-update-notifier": "^2.0.0",
     "swagger-ui-express": "^4.1.6",
     "xss-clean": "^0.1.1",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.9"
+    "nodemon": "^3.1.4"
   },
   "engines": {
     "node": "20.x"
